@@ -47,7 +47,13 @@ def create_map_with_markers(filename):
     """读取文件并创建地图"""
     # 读取文件中的地名和解释
     with open(filename, 'r', encoding='utf-8') as file:
-        location_lines = file.read().splitlines()
+        # 过滤掉空白行
+        location_lines = [line for line in file.read().splitlines() if line.strip()]
+    
+    # 获取地名前缀（第一行）
+    prefix = location_lines[0].strip() if location_lines else ""
+    # 剩余行为实际地名和描述
+    location_lines = location_lines[1:]
     
     # 收集所有有效的坐标
     valid_coordinates = []
@@ -55,11 +61,13 @@ def create_map_with_markers(filename):
     
     for line in location_lines:
         # 分割地名和解释
-        parts = line.strip().split(' ', 1)
+        parts = line.strip().split('：', 1)
         location_name = parts[0]
-        description = parts[1] if len(parts) > 1 else ''  # 如果没有解释则为空字符串
+        description = parts[1] if len(parts) > 1 else ''
         
-        coordinates = get_location_coordinates(location_name)
+        # 在地名前添加前缀进行搜索
+        search_name = f"{prefix} {location_name}".strip()
+        coordinates = get_location_coordinates(search_name)
         if coordinates:
             valid_coordinates.append(coordinates)
             location_markers.append((coordinates, location_name, description))
