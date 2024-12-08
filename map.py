@@ -102,10 +102,10 @@ def create_map_with_markers(filename):
     """
     
     # 保存为HTML文件
-    with open('locations_map.html', 'w', encoding='utf-8') as f:
+    with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
 
 # 使用示例
 if __name__ == "__main__":
-    
+
     create_map_with_markers("locations.txt")
